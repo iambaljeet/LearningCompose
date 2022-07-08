@@ -4,16 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.app.learningcompose.ui.theme.LearningComposeTheme
 
 class MainActivity : ComponentActivity() {
@@ -26,7 +20,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    StateExample1()
+                    StateExample()
                 }
             }
         }
@@ -34,38 +28,52 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
+fun StateExample() {
+    var count by remember {
+        mutableStateOf(0)
+    }
+    var count2 by remember {
+        mutableStateOf(2)
+    }
+    var count3 by remember {
+        mutableStateOf(4)
+    }
+    var count4 by remember {
+        mutableStateOf(6)
+    }
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Component1 {
+            count += 1
+            count2 += 2
+            count3 += 4
+            count4 += 6
+        }
+        Component2(count)
+        Component2(count2)
+        Component2(count3)
+        Component2(count4)
+    }
 }
 
-var size: MutableState<Dp> = mutableStateOf(10.dp)
-var click = 0
-
 @Composable
-fun StateExample1() {
+fun Component1(onButtonClick: () -> Unit) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "Clicked $click times")
-
-        Spacer(modifier = Modifier.height(size.value))
-
-        ElevatedButton(onClick = {
-            size.value += 10.dp
-            click += 1
-        }) {
-            Text(text = "Click Here")
+        Text(text = "This is a Header")
+        Button(onClick = onButtonClick) {
+            Text(text = "Click Me")
         }
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
-    LearningComposeTheme {
-        Greeting("Android")
-    }
+fun Component2(count: Int) {
+    Text(text = "Value Of Count: $count")
 }
